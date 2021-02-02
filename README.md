@@ -1,3 +1,6 @@
+![NBA Logo](nba.png)
+
+
 # The Basketball Domain
 
 As lifelong basketball fans, we all found ourselves pondering - keeping BLM in mind following the events of last year - if the NBA, a longstanding American institution, is truly free of racism - at least in the paycheck department. With just under 75% of the league being made up of Black players, you would expect this to be true. Furthmore, the league's amazing show of force following the spotlight on BLM last year - allowing players to kneel during the national anthem, putting "Black Lives Matter" on the court, players putting BLM messages on jerseys, etc. - suggests that the NBA cares deeply about social justice and ensuring that its players are treated equitably. If there truly _was_ racism present in the league, your average fan would not be able to tell. However, with only 8 out of the league's 30 general managers being Black, one has to wonder if there is any kind of subconscious racism creeping in when it comes time to determine contract values. Obviously, we cannot directly quantify this situation. Would James Harden be making **more** money if he was white? It is impossible to tell, but by performing linear regressions on assorted player statistics - one _with_ race, one _without_ race -  with respect to salary, we can hopefully identify any sort of trend if it does indeed exist.
