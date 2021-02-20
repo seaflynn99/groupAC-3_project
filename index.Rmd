@@ -3,8 +3,7 @@ output:
   html_document: default
 ---
 # Exploring the NBA versus the WNBA
-As lifelong basketball fans, we all found ourselves pondering - keeping BLM in mind following the events of last year - if the NBA, a longstanding American institution, is truly free of racism - at least in the paycheck department. While exploring effects of race within the NBA, we found ourselves wondering about more information we could deduce about basketball as a profession for other _minorities_ or _underpriviledged_ sections of the society. We made our way to the WNBA (Women's NBA). We gathered data from NBA and WNBA players and compared significant information including wages. Comparing salaries across genders in the two organizations - NBA and WNBA - we found that the difference in the salaries for both genders is drastic. Women in basketball get paid less than men in millions of dollars. Through this exploratory analysis, we want to understand the reasons for the difference in salaries. Is it purely sexism? or other factors such as average player performance, time commitment required, popularity or any other factors could completely or partially explain the difference in pay.
-
+At the end of our project proposal, we mentioned exploring the salary differences between the **NBA** and the **WNBA** alongside the possible salary differences between players of different races in the **NBA**. For this exploratory analysis, what we wanted to do, before really diving into the meat of the project, was take a quick detour into the world of the WNBA, exploring player statistics and salaries to see if anything performance-wise stuck out that would justify paying the WNBA's athletes so little compared to the NBA. Drawing from tables of 500 NBA players, 140 WNBA players, and the salaries of each league's top 8 draft picks, what we found was quite frankly eye-opening. Not only were each league's average player statistics incredibly similar (down to the distribution!), but even the NBA draft picks - fresh out of high school or college, having done nothing professionally - are making __millions__ more than their WNBA counterparts. We have no definitive answers as to why this phenomenon is occurring, but it most definitely raises eyebrows, begging the question as to __why__ this gargantuan disparity exists in the first place.
 
 
 # Summary Statistics Table
@@ -13,6 +12,7 @@ library(readxl)
 library(dplyr)
 library(tidyverse)
 library(knitr)
+library(gridExtra)
 ```
 
 ```{r, echo=FALSE}
@@ -66,4 +66,46 @@ grouped_bb_table <- group_by(renamed_table, Number.of.NBA.Players, Number.of.WNB
 grouped_bb_table <- subset(grouped_bb_table, select = -c(Freq))
 kable(grouped_bb_table)
 ```
-For this table, what we wanted to was highlight was the similarity between athletes in the NBA and the WNBA. For years, it has been assumed that women are just automatically worse athletes than their male counterparts - not even coming close in terms of athletic performance. But, as we can see in the above table, this is not true. Although the highest averages of players in the NBA are higher than those in the WNBA, professional basketball is professional basketball - and all things considered, these states are fairly comparable. Of course, this then begs the question of **why** NBA players tend to make millions more than players in the WNBA - and this is a question we look forward to exploring in the final product.
+For this table, what we wanted to was highlight was the similarity between athletes in the NBA and the WNBA. For years, it has been assumed that women are just automatically worse athletes than their male counterparts - not even coming close in terms of athletic performance. But, as we can see in the above table, this is not true. Although the highest averages of players in the NBA are higher than those in the WNBA, professional basketball is professional basketball - and all things considered, these stats are fairly comparable. Of course, this then begs the question of **why** NBA players tend to make millions more than players in the WNBA - and this is a question we attempt to somewhat elaborate on in our charts.
+
+
+# Chart 1: Draft Salary Bar Charts
+```{r, echo=FALSE}
+rookie_salaries <- read_excel("data/rookie_salaries.xlsx")
+
+rook_sal_nba<-ggplot(data=rookie_salaries, aes(x=Pick, y=NBA_sals)) +
+  geom_bar(stat="identity") +
+  ggtitle("NBA Top Draft Pick Salaries")
+rook_sal_wnba<-ggplot(data=rookie_salaries, aes(x=Pick, y=WNBA_sals)) +
+  geom_bar(stat="identity") +
+  ggtitle("WNBA Top Draft Pick Salaries")
+barsalaries <- grid.arrange(rook_sal_nba, rook_sal_wnba)
+barsalaries
+```
+The above charts give a rather stark look at just how differently athletes in the NBA are paid compared to athletes in the WNBA. Keep in mind, the 8 different salaries are taken from 8 different __draft picks__ - meaning that they have not even had a chance to prove themselves on the court yet. On average, the WNBA draft picks are paid under 70,000 dollars - while even the lowest paid NBA draft pick is making over 4 million dollars.
+
+
+# Chart 2: Average Points Per Game Histogram
+```{r, echo=FALSE}
+points_nba <- ggplot(nba_basketball_reference, aes(x=PTS)) + geom_histogram() +
+  ggtitle("NBA Average Points")
+points_wnba <- ggplot(wnba_basketball_reference, aes(x=PTS)) + geom_histogram() +
+  ggtitle("WNBA Average Points")
+histopoints <- grid.arrange(points_nba, points_wnba, nrow = 1)
+histopoints
+```
+The two histograms above take a look at a commonly referenced player stat, the one which most often comes to mind for most people when they think about basketball - points. As we can see, both have incredibly similar distributions (heavily right skewed), with an average landing at right around 5 points. The summary stats showed a higher max average for the NBA than the WNBA, and this is visible here as well - although with the rest of the data present, it is now possible to see just how similar both leagues are when it comes to athleticism, especially within the realm of scoring.
+
+
+# Chart 3: AVerage Rebounds per Game Scatterplot
+```{r, echo=FALSE}
+rebounds_nba <- ggplot(data = nba_basketball_reference) +
+  geom_point(mapping = aes(x = TRB, y = MP)) +
+  ggtitle("NBA Average Rebounds")
+rebounds_wnba <- ggplot(data = wnba_basketball_reference) +
+  geom_point(mapping = aes(x = TRB, y = MP)) +
+  ggtitle("WNBA Average Rebounds")
+scatterbounds <- grid.arrange(rebounds_nba, rebounds_wnba, nrow = 1)
+scatterbounds
+```
+Looking at the two scatterplots, we see another way in which the NBA and WNBA are similarly skilled - in rebounds! With just around 4 times as many players, the NBA's plot is more densely populated, yet both leagues - similarly to points - still seem to follow a similar distribution, breaking off at right under 10 average rebounds per game. Many people consider rebounds to be among the most difficult feats in basketball, and the fact that both men and women appear to be performing at right around the same level dismantles the argument that the NBA gets paid more than the WNBA due to their raw athleticism. If not that, then what else could it possibly be?
