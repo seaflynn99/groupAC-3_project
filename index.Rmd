@@ -7,8 +7,14 @@ As lifelong basketball fans, we all found ourselves pondering - keeping BLM in m
 
 At the end of our project proposal, we mentioned exploring the salary differences between the **NBA** and the **WNBA** alongside the possible salary differences between players of different races in the **NBA**. For this exploratory analysis, what we wanted to do, before really diving into the meat of the project, was take a quick detour into the world of the WNBA, exploring player statistics and salaries to see if anything performance-wise stuck out that would justify paying the WNBA's athletes so little compared to the NBA. Drawing from tables of 500 NBA players, 140 WNBA players, and the salaries of each league's top 8 draft picks, what we found was quite frankly eye-opening. Not only were each league's average player statistics incredibly similar (down to the distribution!), but even the NBA draft picks - fresh out of high school or college, having done nothing professionally - are making __millions__ more than their WNBA counterparts. We have no definitive answers as to why this phenomenon is occurring, but it most definitely raises eyebrows, begging the question as to __why__ this gargantuan disparity exists in the first place.
 
+Looking at some summary stats, we can tell some immediate differences. From the get-go, the data shows us that we are looking at statistics for
+**116** NBA players, and **140** WNBA players. The highest average __points per game__ in the NBA is **30.4**, while the highest in the WNBA is
+**22.8**. The highest average number of __rebounds__ in the NBA is **16**, while the highest in the WNBA is **9.7**. The highest average number
+of __free throw attempts__ in the NBA is 10.1, while the highest in the WNBA is 6.9. Lastly, the highest average number of __minutes played per game__
+in the NBA is **36.9**, while the highest in the WNBA is **34.2**.
 
-# Summary Statistics Table
+
+# Grouped Tables - How Do They Stack Up?
 ```{r include=FALSE}
 library(readxl)
 library(dplyr)
@@ -20,67 +26,39 @@ library(gridExtra)
 ```{r, echo=FALSE}
 nba_basketball_reference <- read_excel("data/nba_basketball-reference.xlsx")
 wnba_basketball_reference <- read_excel("data/wnba_basketball-reference.xlsx")
+rookie_salaries <- read_excel("data/rookie_salaries.xlsx")
 
-basketball_info <- list()
-basketball_info$num_players_nba <- nrow(nba_basketball_reference)
-basketball_info$highest_average_nba_ppg <- nba_basketball_reference %>%
-  filter(PTS == max(PTS, na.rm = T)) %>%
-  select(PTS)
-basketball_info$highest_average_nba_rebounds <- nba_basketball_reference %>%
-  filter(TRB == max(TRB, na.rm = T)) %>%
-  select(TRB)
-basketball_info$highest_average_nba_mins <- nba_basketball_reference %>%
-  filter(MP == max(MP, na.rm = T)) %>%
-  select(MP)
-basketball_info$highest_average_nba_freethrow_attempts <- nba_basketball_reference %>%
-  filter(FTA == max(FTA, na.rm = T)) %>%
-  select(FTA)
-basketball_info$num_players_wnba <- nrow(wnba_basketball_reference)
-basketball_info$highest_average_wnba_ppg <- wnba_basketball_reference %>%
-  filter(PTS == max(PTS, na.rm = T)) %>%
-  select(PTS)
-basketball_info$highest_average_wnba_rebounds <- wnba_basketball_reference %>%
-  filter(TRB == max(TRB, na.rm = T)) %>%
-  select(TRB)
-basketball_info$highest_average_wnba_mins <- wnba_basketball_reference %>%
-  filter(MP == max(MP, na.rm = T)) %>%
-  select(MP)
-basketball_info$highest_average_wnba_freethrow_attempts <- wnba_basketball_reference %>%
-  filter(FTA == max(FTA, na.rm = T)) %>%
-  select(FTA)
+nba_tibble <- group_by(nba_basketball_reference, G) %>%
+  summarize_at(c("PTS", "TRB"), mean, na.rm = TRUE) %>%
+  round(digits = 2) %>%
+  rename(NBA_Games_Played = G, NBA_Average_Points = PTS, NBA_Average_Rebounds = TRB)
+nba_head <- head(nba_tibble)
 
-bb_info_table <- table(basketball_info)
-bb_info_table <- data.frame(bb_info_table)
-renamed_table <- bb_info_table %>%
-  rename(
-    "Number.of.NBA.Players" = "num_players_nba",
-    "Highest.Average.NBA.PPG" = "highest_average_nba_ppg",
-    "Highest.Average.NBA.Rebounds" = "highest_average_nba_rebounds",
-    "Highest.Average.NBA.Minutes" = "highest_average_nba_mins",
-    "Highest.Average.NBA.FTAs" = "highest_average_nba_freethrow_attempts",
-    "Number.of.WNBA.Players" = "num_players_wnba",
-    "Highest.Average.WNBA.PPG" = "highest_average_wnba_ppg",
-    "Highest.Average.WNBA.Rebounds" = "highest_average_wnba_rebounds",
-    "Highest.Average.WNBA.Minutes" = "highest_average_wnba_mins",
-    "Highest.Average.WNBA.FTAs" = "highest_average_wnba_freethrow_attempts",
-  )
-grouped_bb_table <- group_by(renamed_table, Number.of.NBA.Players, Number.of.WNBA.Players)
-grouped_bb_table <- subset(grouped_bb_table, select = -c(Freq))
-kable(grouped_bb_table)
+wnba_tibble <- group_by(wnba_basketball_reference, G) %>%
+  summarize_at(c("PTS", "TRB"), mean, na.rm = TRUE) %>%
+  round(digits = 2) %>%
+  rename(WNBA_Games_Played = G, WNBA_Average_Points = PTS, WNBA_Average_Rebounds = TRB)
+wnba_head <- head(wnba_tibble)
+
+knitr::kable(list(nba_head, wnba_head))
 ```
-For this table, what we wanted to was highlight was the similarity between athletes in the NBA and the WNBA. For years, it has been assumed that women are just automatically worse athletes than their male counterparts - not even coming close in terms of athletic performance. But, as we can see in the above table, this is not true. Although the highest averages of players in the NBA are higher than those in the WNBA, professional basketball is professional basketball - and all things considered, these stats are fairly comparable. Of course, this then begs the question of **why** NBA players tend to make millions more than players in the WNBA - and this is a question we attempt to somewhat elaborate on in our charts.
+For this table, what we wanted to was highlight was the similarity between athletes in the NBA and the WNBA. For years, it has been assumed that women are just automatically worse athletes than their male counterparts - not even coming close in terms of athletic performance. But, as we can see in the above table, this is not true. What we have here is the average number of points scored and rebounds made for a player who has a certain number of games under their belt - and surprisingly,
+the WNBA appears to be doing much better than the NBA! There are many reasons why this could be true, although what immediately comes to mind is the fact that the 
+NBA season is almost 4 times the length of the WNBA season - so players in the WNBA are more likely to be giving it their all from an earlier point in the year.
 
 
 # Chart 1: Draft Salary Bar Charts
 ```{r, echo=FALSE}
-rookie_salaries <- read_excel("data/rookie_salaries.xlsx")
-
-rook_sal_nba<-ggplot(data=rookie_salaries, aes(x=Pick, y=NBA_sals)) +
+rook_sal_nba <- ggplot(data = rookie_salaries, aes(x= Player, y= NBA_Salaries)) +
   geom_bar(stat="identity") +
-  ggtitle("NBA Top Draft Pick Salaries")
-rook_sal_wnba<-ggplot(data=rookie_salaries, aes(x=Pick, y=WNBA_sals)) +
+  ggtitle("NBA Top Draft Pick Salaries") +
+  labs(
+    x = "Pick Number", y = "Salaries (Dollars)")
+rook_sal_wnba <- ggplot(data= rookie_salaries, aes(x= Player, y= WNBA_Salaries)) +
   geom_bar(stat="identity") +
-  ggtitle("WNBA Top Draft Pick Salaries")
+  ggtitle("WNBA Top Draft Pick Salaries")+
+  labs(
+    x = "Pick Number", y = "Salaries (Dollars)")
 barsalaries <- grid.arrange(rook_sal_nba, rook_sal_wnba)
 barsalaries
 ```
@@ -90,16 +68,20 @@ The above charts give a rather stark look at just how differently athletes in th
 # Chart 2: Average Points Per Game Histogram
 ```{r, echo=FALSE}
 points_nba <- ggplot(nba_basketball_reference, aes(x=PTS)) + geom_histogram() +
-  ggtitle("NBA Average Points")
+  ggtitle("NBA Average Points") +
+labs(
+  x = "Player Points", y = "Number of Players")
 points_wnba <- ggplot(wnba_basketball_reference, aes(x=PTS)) + geom_histogram() +
-  ggtitle("WNBA Average Points")
-histopoints <- grid.arrange(points_nba, points_wnba, nrow = 1)
+  ggtitle("WNBA Average Points") +
+  labs(
+    x = "Player Points", y = "Number of Players")
+histopoints <- grid.arrange(points_nba, points_wnba, nrow = 1) 
 histopoints
 ```
 The two histograms above take a look at a commonly referenced player stat, the one which most often comes to mind for most people when they think about basketball - points. As we can see, both have incredibly similar distributions (heavily right skewed), with an average landing at right around 5 points. The summary stats showed a higher max average for the NBA than the WNBA, and this is visible here as well - although with the rest of the data present, it is now possible to see just how similar both leagues are when it comes to athleticism, especially within the realm of scoring.
 
 
-# Chart 3: AVerage Rebounds per Game Scatterplot
+# Chart 3: Average Rebounds per Game Scatterplot
 ```{r, echo=FALSE}
 rebounds_nba <- ggplot(data = nba_basketball_reference) +
   geom_point(mapping = aes(x = TRB, y = MP)) +
