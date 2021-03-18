@@ -104,11 +104,24 @@ fifth_tab <- tabPanel( #creating page 5
   sidebarLayout(
     
     mainPanel( 
-      h1("Salaries in the NBA and the WNBA"),
-      plotlyOutput("salary_chart"),
-      p("The above chart allows us to hone in and identify any obvious
-        differences in salary between Black and white-passing players - in addition
-        to the more obvious differences in salary between the NBA and WNBA.")
+      h1("Takeaways"),
+      p("Through this project, we observe that the performance levels for men (NBA) and women (WNBA) are comparable. 
+      However, the salaries for players linked to the two organizations have a stark difference. Men make a lot more
+      income from their job (playing) with the NBA than women make for their job with the WNBA. But does this necessarily 
+      mean that women are being discriminated against in the sports world? From the 3rd chart we can see that the viewership 
+      and ratings are significantly higher for the NBA compared to the WNBA. Therefore, the NBA gets better sponsorships
+      and can afford to pay their players higher salaries than the WNBA. Thus, we can conclude that there is no 
+      statistically significant discrimination against women from their organization. However, the societal
+      conditioning and sexism makes men's games more interesting to the viewers. This means that sexism prevails
+      in sports because of the "customers" i.e., audience. There are not many things the organizations can do to make
+      women's sports more appealing to the audience. Hopefully, things will change, and people will willingly watch a
+      sport regardless of the players' genders."),
+      p("To highlight the takeaways:
+          1.	NBA and WNBA have similar quality players. 
+          2.	NBA players get paid significantly more than WNBA players.
+          3.	NBA has a higher viewership than WNBA, and thus has a greater income."),
+      p("Food for thought: 
+        Are the ratings different because sports is considered male entertainment? Men like games better when men are playing?")
     )
   )
 )
