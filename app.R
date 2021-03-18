@@ -70,6 +70,48 @@ third_tab <- tabPanel( #creating page 3
   )
 )
 
+fourth_tab <- tabPanel( #creating page 4
+  "Viewership",
+  titlePanel("Chart 3"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      helpText("Points scored in the NBA versus WNBA"),
+      selectInput("gender", #second widget, used for choosing display data
+                  label = "Choose a league to display",
+                  choices = list("NBA",
+                                 "WNBA")
+      ),
+      selectInput("race", #third widget, choose race of players to graph
+                  label ="Choose a race to graph",
+                  choices = list("White", "Black")
+      )
+    ),
+    mainPanel( 
+      h1("TV Ratings for the NBA and the WNBA"),
+      plotlyOutput("salary_chart"),
+      p("The above chart allows us to understand that the difference in salaries may be
+        a result of difference in Ratings --> sponsership --> income of the organization.")
+    )
+  )
+)
+
+
+fifth_tab <- tabPanel( #creating page 5
+  "Conclusion",
+  titlePanel("Conclusion"),
+  
+  sidebarLayout(
+    
+    mainPanel( 
+      h1("Salaries in the NBA and the WNBA"),
+      plotlyOutput("salary_chart"),
+      p("The above chart allows us to hone in and identify any obvious
+        differences in salary between Black and white-passing players - in addition
+        to the more obvious differences in salary between the NBA and WNBA.")
+    )
+  )
+)
 
 
 # Defining the UI
