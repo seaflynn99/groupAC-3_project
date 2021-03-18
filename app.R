@@ -117,7 +117,7 @@ fifth_tab <- tabPanel( #creating page 5
       women's sports more appealing to the audience. Hopefully, things will change, and people will willingly watch a
       sport regardless of the players' genders."),
       p("To highlight the takeaways:
-          1.	NBA and WNBA have similar quality players. 
+          1.	1.	NBA and WNBA players perform similar statistically.  
           2.	NBA players get paid significantly more than WNBA players.
           3.	NBA has a higher viewership than WNBA, and thus has a greater income."),
       p("Food for thought: 
